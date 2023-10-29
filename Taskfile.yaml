@@ -92,6 +92,19 @@ tasks:
       - "{{ .k8s_dir }}/infra/istio/bin/istioctl install --set profile=demo -y"
       - "kubectl label namespace {{ .namespace_service }} istio-injection=enabled"
 
+  k8s/deploy/service:
+    desc: Deploy service to K8S.
+    cmds:
+      - |
+        if helm list -q -n {{ .namespace_service }} | grep -q "jb-service"; then
+          echo "Release exists, upgrading..."
+          helm upgrade jb-service {{ .k8s_dir }}/apps/jb-service -n {{ .namespace_service }}
+        else
+          echo "Release doesn't exist, installing..."
+          kubectl create namespace {{ .namespace_service }} || true
+          helm install jb-service {{ .k8s_dir }}/service -n {{ .namespace_service }}
+        fi
+
   minikube/up:
     desc: Run minikube with service.
     cmds:
@@ -106,6 +119,7 @@ tasks:
       - kubectl create namespace {{ .namespace_service }}
 
       - task: k8s/deploy/infra
+      - task: k8s/deploy/service
 
   minikube/infra/prometheus-lookup:
     desc: Minikube tunnel to prometheus.
@@ -119,3 +133,8 @@ tasks:
         pass=$(kubectl get secret -n {{ .namespace_infra }} grafana -o jsonpath="{.data.admin-password}" | base64 --decode)
         echo "username: admin, password: $pass"
       - kubectl port-forward svc/grafana 3000:80 -n {{ .namespace_infra }}
+
+  minikube/service/app-lookup:
+    desc: Minikube tunnel to application.
+    cmds:
+      - minikube service jb-service -n {{ .namespace_service }}

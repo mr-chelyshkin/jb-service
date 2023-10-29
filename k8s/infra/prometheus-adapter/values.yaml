@@ -120,7 +120,7 @@ startupProbe: {}
 rules:
   default: false
   custom:
-    - seriesQuery: 'istio_requests_total{destination_app="jb-service", reporter="destination"}'
+    - seriesQuery: 'istio_requests_total{destination_service_name="jb-service", reporter="destination"}'
       resources:
         template: <<.Resource>>
       name:
