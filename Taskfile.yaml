@@ -11,6 +11,12 @@ vars:
   golang_version: 1.20.6
   app_bin_name: jb-app
 
+  minikube_mem: 8192
+  minikube_cpu: 4
+
+  namespace_infra: infra
+  namespace_service: service
+
 tasks:
   default:
     desc: Default task.
@@ -67,3 +73,49 @@ tasks:
     cmds:
       - docker login -u ${DOCKER_USER} -p ${DOCKER_PASS}
       - docker push ${DOCKER_IMAGE}:${DOCKER_TAG}
+
+  k8s/deploy/infra:
+    desc: Deploy infrastructure tools to K8S.
+    cmds:
+      - |
+        for file in {{ .k8s_dir }}/infra/common/*.yaml; do
+          kubectl apply -f "$file"
+        done
+      - for: ["prometheus", "prometheus-adapter", "grafana"]
+        cmd: |
+          if helm list -q -n {{ .namespace_infra }} | grep -q {{ .ITEM }}; then
+            helm upgrade {{ .ITEM }} {{ .k8s_dir }}/infra/{{ .ITEM }} -n {{ .namespace_infra }}
+          else
+            kubectl create namespace {{ .namespace_infra }} || true
+            helm install {{ .ITEM }} {{ .k8s_dir }}/infra/{{ .ITEM }} -n {{ .namespace_infra }}
+          fi
+      - "{{ .k8s_dir }}/infra/istio/bin/istioctl install --set profile=demo -y"
+      - "kubectl label namespace {{ .namespace_service }} istio-injection=enabled"
+
+  minikube/up:
+    desc: Run minikube with service.
+    cmds:
+      - minikube stop || true
+      - minikube cache delete
+      - minikube delete
+      - minikube config set memory {{ .minikube_mem }}
+      - minikube config set cpus {{ .minikube_cpu }}
+      - minikube start --driver=docker
+
+      - kubectl create namespace {{ .namespace_infra }}
+      - kubectl create namespace {{ .namespace_service }}
+
+      - task: k8s/deploy/infra
+
+  minikube/infra/prometheus-lookup:
+    desc: Minikube tunnel to prometheus.
+    cmds:
+      - minikube service prometheus-server -n {{ .namespace_infra }}
+
+  minikube/infra/grafana-lookup:
+    desc: Minikube tunnel to grafana.
+    cmds:
+      - |
+        pass=$(kubectl get secret -n {{ .namespace_infra }} grafana -o jsonpath="{.data.admin-password}" | base64 --decode)
+        echo "username: admin, password: $pass"
+      - kubectl port-forward svc/grafana 3000:80 -n {{ .namespace_infra }}
