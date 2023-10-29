@@ -1,0 +1,69 @@
+version: 3
+
+vars:
+  root_dir:
+    sh: git rev-parse --show-toplevel
+  app_dir:
+    "{{ .root_dir }}/app"
+  k8s_dir:
+    "{{ .root_dir }}/k8s"
+
+  golang_version: 1.20.6
+  app_bin_name: jb-app
+
+tasks:
+  default:
+    desc: Default task.
+    cmds:
+      - echo "Please enter a task name or use -l / --list-all to list all available tasks"
+    silent: true
+
+  common/vendor:
+    desc: Run go mod vendor.
+    cmds:
+      - |
+        cd {{ .app_dir }} && go mod tidy
+        if [ -d "{{ .app_dir }}/vendor" ]; then
+          echo "{{ .app_dir }}/vendor folder already exist"
+        else
+          go mod vendor
+        fi
+    silent: true
+    internal: true
+
+  app/swagger/init:
+    desc: Init / ReInit Swagger
+    cmds:
+      - cd {{ .app_dir }} && swag init -g ./cmd/main.go
+    internal: true
+        
+  app/local/build:
+    desc: Build binary local.
+    deps:
+      - common/vendor
+    cmds:
+      - cd {{ .app_dir }} && go build -asmflags="-trimpath=OPATH" -ldflags="-w -s" -gcflags="-trimpath=OPATH" -o {{ .root_dir }}/{{ .app_bin_name }} ./cmd
+      - chmod a+x {{ .root_dir }}/{{ .app_bin_name }}
+
+  app/docker/build:
+    desc: Build docker image.
+    deps:
+      - common/vendor
+    env:
+      DOCKER_IMAGE: chelyshkin/jb-service
+      DOCKER_TAG:   latest
+    cmds:
+      - docker build --force-rm --target {{ ARCH }} -t ${DOCKER_IMAGE}:${DOCKER_TAG} --build-arg GO_VERSION={{ .golang_version }} -f {{ .root_dir }}/Dockerfile {{ .root_dir }}
+
+  app/docker/push:
+    desc: Push docker image.
+    deps:
+      - app/docker/build
+    env:
+      DOCKER_USER: '{{ .DOCKER_USER }}'
+      DOCKER_PASS: '{{ .DOCKER_PASS }}'
+      DOCKER_IMAGE: chelyshkin/jb-service
+      DOCKER_TAG:   latest
+    cmds:
+      - docker login -u ${DOCKER_USER} -p ${DOCKER_PASS}
+      - docker push ${DOCKER_IMAGE}:${DOCKER_TAG}

@@ -1,0 +1,116 @@
+info:
+  contact: {}
+paths:
+  /2xx:
+    get:
+      description: 'Get an OK response [status: 200] for testing purposes'
+      produces:
+      - text/plain
+      responses:
+        "200":
+          description: OK
+      summary: Get OK response
+      tags:
+      - Response from service
+  /3xx:
+    get:
+      description: 'Make redirect [status: 301] to "/2xx" for testing purposes'
+      produces:
+      - text/plain
+      responses:
+        "200":
+          description: OK
+      summary: Get OK response
+      tags:
+      - Response from service
+  /4xx:
+    get:
+      description: 'Get an error response [status: 400] for testing purposes'
+      produces:
+      - text/plain
+      responses:
+        "400":
+          description: Bad Request
+      summary: Get BadRequest response
+      tags:
+      - Response from service
+  /5xx:
+    get:
+      description: 'Get an error response [status: 500] for testing purposes'
+      produces:
+      - text/plain
+      responses:
+        "500":
+          description: Internal Server Error
+      summary: Get InternalServerError response
+      tags:
+      - Response from service
+  /api/v1/liveness:
+    get:
+      description: This is LivenessProbe for K8S
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: Return service LivenessProbe
+      tags:
+      - Service State
+  /api/v1/liveness-change:
+    get:
+      description: Change LivenessProbe service flag for check K8S reaction (expect
+        pod restart).
+      produces:
+      - text/plain
+      responses:
+        "200":
+          description: OK
+      summary: 'Change LivenessProbe: Success/Failure.'
+      tags:
+      - Service State
+  /api/v1/oomkill:
+    get:
+      description: Gradual increase in memory consumption for OOM.
+      produces:
+      - text/plain
+      responses:
+        "200":
+          description: OK
+      summary: Increase memory consumption.
+      tags:
+      - Service State
+  /api/v1/readness:
+    get:
+      description: This is ReadnessProbe for K8S
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: Return service ReadnessProbe
+      tags:
+      - Service State
+  /api/v1/readness-change:
+    get:
+      description: 'Change ReadnessProbe service flag for check K8S reaction (expect
+        traffic interrupt, check by req logs: "replica_id").'
+      produces:
+      - text/plain
+      responses:
+        "200":
+          description: OK
+      summary: 'Change ReadnessProbe: Success/Failure.'
+      tags:
+      - Service State
+  /api/v1/throttling:
+    get:
+      description: Increase cpu consumption for throttling with duration 1 minute.
+      produces:
+      - text/plain
+      responses:
+        "200":
+          description: OK
+      summary: Increase cpu consumption.
+      tags:
+      - Service State
+swagger: "2.0"
