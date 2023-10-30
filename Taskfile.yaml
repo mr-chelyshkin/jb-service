@@ -81,7 +81,7 @@ tasks:
         for file in {{ .k8s_dir }}/infra/common/*.yaml; do
           kubectl apply -f "$file"
         done
-      - for: ["prometheus", "prometheus-adapter", "grafana"]
+      - for: ["prometheus", "prometheus-adapter", "grafana", "elasticsearch", "kibana"]
         cmd: |
           if helm list -q -n {{ .namespace_infra }} | grep -q {{ .ITEM }}; then
             helm upgrade {{ .ITEM }} {{ .k8s_dir }}/infra/{{ .ITEM }} -n {{ .namespace_infra }}
@@ -133,6 +133,11 @@ tasks:
         pass=$(kubectl get secret -n {{ .namespace_infra }} grafana -o jsonpath="{.data.admin-password}" | base64 --decode)
         echo "username: admin, password: $pass"
       - kubectl port-forward svc/grafana 3000:80 -n {{ .namespace_infra }}
+
+  minikube/infra/kibana-lookup:
+    desc: Minikube tunnel to kibana.
+    cmds:
+      - kubectl port-forward service/kibana-kibana 5601:5601 -n {{ .namespace_infra }}
 
   minikube/service/app-lookup:
     desc: Minikube tunnel to application.

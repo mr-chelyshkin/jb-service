@@ -1,0 +1,39 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: logstash-configmap
+data:
+  logstash.conf: |
+    input {
+      file {
+        path => "/var/log/service/*.log"
+        start_position => "beginning"
+        codec => json
+        sincedb_path => "/tmp/.sincedb"
+        ignore_older => 0
+        stat_interval => 10
+      }
+    }
+
+    filter {
+      mutate {
+        add_field => { "host" => "%{host}" }
+      }
+    }
+
+    output {
+      elasticsearch {
+        hosts => ["http://elasticsearch-master.infra.svc.cluster.local:9200"]
+        index => "service-logs-%{+YYYY.MM.dd}"
+        user => "elastic" # Optional: if you have security enabled on ES
+        retry_on_conflict => 5
+        retry_initial_interval => 2
+        retry_max_interval => 10
+      }
+    }
+
+  logstash.yml: |
+    http.host: "0.0.0.0"
+    path.config: /usr/share/logstash/pipeline
+    xpack.monitoring.enabled: false
+

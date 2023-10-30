@@ -22,6 +22,8 @@ func New(level []byte) (*Log, error) {
 		return nil, fmt.Errorf("failed to initialize zap log level from '%s': %s", level, err)
 	}
 	cfg.Level = zap.NewAtomicLevelAt(logLevel)
+
+	cfg.OutputPaths = []string{"/var/log/service/service.log"}
 	cfg.ErrorOutputPaths = []string{"stderr"}
 
 	logger, err := cfg.Build(zap.AddStacktrace(zap.DPanicLevel))
