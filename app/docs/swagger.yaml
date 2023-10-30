@@ -3,42 +3,42 @@ info:
 paths:
   /2xx:
     get:
-      description: 'Get an OK response [status: 200] for testing purposes'
+      description: 'Get an OK response [status: 200] for testing purposes.'
       produces:
-      - text/plain
+      - application/json
       responses:
         "200":
           description: OK
-      summary: Get OK response
+      summary: Get OK response.
       tags:
       - Response from service
   /3xx:
     get:
-      description: 'Make redirect [status: 301] to "/2xx" for testing purposes'
+      description: 'Make redirect [status: 301] to "/2xx" for testing purposes.'
       produces:
-      - text/plain
+      - application/json
       responses:
         "200":
           description: OK
-      summary: Get OK response
+      summary: Get OK response.
       tags:
       - Response from service
   /4xx:
     get:
-      description: 'Get an error response [status: 400] for testing purposes'
+      description: 'Get an error response [status: 400] for testing purposes.'
       produces:
-      - text/plain
+      - application/json
       responses:
         "400":
           description: Bad Request
-      summary: Get BadRequest response
+      summary: Get BadRequest response.
       tags:
       - Response from service
   /5xx:
     get:
-      description: 'Get an error response [status: 500] for testing purposes'
+      description: 'Get an error response [status: 500] for testing purposes.'
       produces:
-      - text/plain
+      - application/json
       responses:
         "500":
           description: Internal Server Error
@@ -47,13 +47,13 @@ paths:
       - Response from service
   /api/v1/liveness:
     get:
-      description: This is LivenessProbe for K8S
+      description: This is LivenessProbe for K8S.
       produces:
       - application/json
       responses:
         "200":
           description: OK
-      summary: Return service LivenessProbe
+      summary: Return service LivenessProbe.
       tags:
       - Service State
   /api/v1/liveness-change:
@@ -81,13 +81,13 @@ paths:
       - Service State
   /api/v1/readness:
     get:
-      description: This is ReadnessProbe for K8S
+      description: This is ReadnessProbe for K8S.
       produces:
       - application/json
       responses:
         "200":
           description: OK
-      summary: Return service ReadnessProbe
+      summary: Return service ReadnessProbe.
       tags:
       - Service State
   /api/v1/readness-change:

@@ -8,3 +8,5 @@ var ReplicaID = func() string {
 	h, _ := os.Hostname()
 	return h
 }
+
+var LogFile = ""

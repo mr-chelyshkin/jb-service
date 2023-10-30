@@ -17,14 +17,14 @@ const docTemplate = `{
     "paths": {
         "/2xx": {
             "get": {
-                "description": "Get an OK response [status: 200] for testing purposes",
+                "description": "Get an OK response [status: 200] for testing purposes.",
                 "produces": [
-                    "text/plain"
+                    "application/json"
                 ],
                 "tags": [
                     "Response from service"
                 ],
-                "summary": "Get OK response",
+                "summary": "Get OK response.",
                 "responses": {
                     "200": {
                         "description": "OK"
@@ -34,14 +34,14 @@ const docTemplate = `{
         },
         "/3xx": {
             "get": {
-                "description": "Make redirect [status: 301] to \"/2xx\" for testing purposes",
+                "description": "Make redirect [status: 301] to \"/2xx\" for testing purposes.",
                 "produces": [
-                    "text/plain"
+                    "application/json"
                 ],
                 "tags": [
                     "Response from service"
                 ],
-                "summary": "Get OK response",
+                "summary": "Get OK response.",
                 "responses": {
                     "200": {
                         "description": "OK"
@@ -51,14 +51,14 @@ const docTemplate = `{
         },
         "/4xx": {
             "get": {
-                "description": "Get an error response [status: 400] for testing purposes",
+                "description": "Get an error response [status: 400] for testing purposes.",
                 "produces": [
-                    "text/plain"
+                    "application/json"
                 ],
                 "tags": [
                     "Response from service"
                 ],
-                "summary": "Get BadRequest response",
+                "summary": "Get BadRequest response.",
                 "responses": {
                     "400": {
                         "description": "Bad Request"
@@ -68,9 +68,9 @@ const docTemplate = `{
         },
         "/5xx": {
             "get": {
-                "description": "Get an error response [status: 500] for testing purposes",
+                "description": "Get an error response [status: 500] for testing purposes.",
                 "produces": [
-                    "text/plain"
+                    "application/json"
                 ],
                 "tags": [
                     "Response from service"
@@ -85,14 +85,14 @@ const docTemplate = `{
         },
         "/api/v1/liveness": {
             "get": {
-                "description": "This is LivenessProbe for K8S",
+                "description": "This is LivenessProbe for K8S.",
                 "produces": [
                     "application/json"
                 ],
                 "tags": [
                     "Service State"
                 ],
-                "summary": "Return service LivenessProbe",
+                "summary": "Return service LivenessProbe.",
                 "responses": {
                     "200": {
                         "description": "OK"
@@ -136,14 +136,14 @@ const docTemplate = `{
         },
         "/api/v1/readness": {
             "get": {
-                "description": "This is ReadnessProbe for K8S",
+                "description": "This is ReadnessProbe for K8S.",
                 "produces": [
                     "application/json"
                 ],
                 "tags": [
                     "Service State"
                 ],
-                "summary": "Return service ReadnessProbe",
+                "summary": "Return service ReadnessProbe.",
                 "responses": {
                     "200": {
                         "description": "OK"

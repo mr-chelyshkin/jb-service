@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"strings"
 
+	"github.com/mr-chelyshkin/jb-service/app"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 )
@@ -23,8 +24,13 @@ func New(level []byte) (*Log, error) {
 	}
 	cfg.Level = zap.NewAtomicLevelAt(logLevel)
 
-	cfg.OutputPaths = []string{"/var/log/service/service.log"}
-	cfg.ErrorOutputPaths = []string{"stderr"}
+	if app.LogFile == "" {
+		cfg.OutputPaths = []string{"stdout"}
+		cfg.ErrorOutputPaths = []string{"stderr"}
+	} else {
+		cfg.OutputPaths = []string{"stdout", app.LogFile}
+		cfg.ErrorOutputPaths = []string{"stderr", app.LogFile}
+	}
 
 	logger, err := cfg.Build(zap.AddStacktrace(zap.DPanicLevel))
 	if err != nil {

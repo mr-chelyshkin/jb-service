@@ -20,8 +20,8 @@ type probeResponse struct {
 }
 
 // @Tags        Service State
-// @Summary		Return service LivenessProbe
-// @Description	This is LivenessProbe for K8S
+// @Summary		Return service LivenessProbe.
+// @Description	This is LivenessProbe for K8S.
 // @Produce		json
 // @Success		200
 // @Router		/api/v1/liveness [get]
@@ -60,8 +60,8 @@ func handlerChangeLivenessProbe(w http.ResponseWriter, _ *http.Request) {
 }
 
 // @Tags        Service State
-// @Summary		Return service ReadnessProbe
-// @Description	This is ReadnessProbe for K8S
+// @Summary		Return service ReadnessProbe.
+// @Description	This is ReadnessProbe for K8S.
 // @Produce		json
 // @Success		200
 // @Router		/api/v1/readness [get]
