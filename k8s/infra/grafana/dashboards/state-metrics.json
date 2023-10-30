@@ -386,7 +386,7 @@
             "uid": "prometheus"
           },
           "editorMode": "code",
-          "expr": "sum(rate(istio_requests_total{destination_service_name=\"jb-service\", reporter=\"destination\"}[10m])) or vector(0)",
+          "expr": "sum(rate(istio_requests_total{destination_service_name=\"jb-service\", reporter=\"destination\"}[1m])) or vector(0)",
           "instant": false,
           "legendFormat": "__auto",
           "range": true,
@@ -2502,7 +2502,7 @@
       {
         "allValue": "",
         "current": {
-          "selected": true,
+          "selected": false,
           "text": "service",
           "value": "service"
         },

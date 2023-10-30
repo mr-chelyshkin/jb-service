@@ -126,7 +126,7 @@ rules:
       name:
         matches: "^(.*)_total"
         as: "requests_per_second"
-      metricsQuery: 'sum(rate(<<.Series>>{<<.LabelMatchers>>}[10m])) by (<<.GroupBy>>)'
+      metricsQuery: 'sum(rate(<<.Series>>{<<.LabelMatchers>>}[1m])) by (<<.GroupBy>>)'
 
     #custom: []
     # - seriesQuery: '{__name__=~"^some_metric_count$"}'
