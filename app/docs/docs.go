@@ -104,7 +104,7 @@ const docTemplate = `{
             "get": {
                 "description": "Change LivenessProbe service flag for check K8S reaction (expect pod restart).",
                 "produces": [
-                    "text/plain"
+                    "application/json"
                 ],
                 "tags": [
                     "Service State"
@@ -121,7 +121,7 @@ const docTemplate = `{
             "get": {
                 "description": "Gradual increase in memory consumption for OOM.",
                 "produces": [
-                    "text/plain"
+                    "application/json"
                 ],
                 "tags": [
                     "Service State"
@@ -155,7 +155,7 @@ const docTemplate = `{
             "get": {
                 "description": "Change ReadnessProbe service flag for check K8S reaction (expect traffic interrupt, check by req logs: \"replica_id\").",
                 "produces": [
-                    "text/plain"
+                    "application/json"
                 ],
                 "tags": [
                     "Service State"
@@ -172,7 +172,7 @@ const docTemplate = `{
             "get": {
                 "description": "Increase cpu consumption for throttling with duration 1 minute.",
                 "produces": [
-                    "text/plain"
+                    "application/json"
                 ],
                 "tags": [
                     "Service State"

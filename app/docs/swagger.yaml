@@ -61,7 +61,7 @@ paths:
       description: Change LivenessProbe service flag for check K8S reaction (expect
         pod restart).
       produces:
-      - text/plain
+      - application/json
       responses:
         "200":
           description: OK
@@ -72,7 +72,7 @@ paths:
     get:
       description: Gradual increase in memory consumption for OOM.
       produces:
-      - text/plain
+      - application/json
       responses:
         "200":
           description: OK
@@ -95,7 +95,7 @@ paths:
       description: 'Change ReadnessProbe service flag for check K8S reaction (expect
         traffic interrupt, check by req logs: "replica_id").'
       produces:
-      - text/plain
+      - application/json
       responses:
         "200":
           description: OK
@@ -106,7 +106,7 @@ paths:
     get:
       description: Increase cpu consumption for throttling with duration 1 minute.
       produces:
-      - text/plain
+      - application/json
       responses:
         "200":
           description: OK
