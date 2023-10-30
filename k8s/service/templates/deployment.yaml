@@ -1,16 +1,3 @@
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: shared-logs-pvc
-spec:
-  accessModes:
-    - ReadWriteOnce
-  resources:
-    requests:
-      storage: 1Gi
-
----
-
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -65,7 +52,6 @@ spec:
             - name: shared-logs
               mountPath: /var/log/service
 
-        # Logstash container configuration
         - name: logstash
           image: "docker.elastic.co/logstash/logstash:7.14.0"
           securityContext:
@@ -80,7 +66,6 @@ spec:
             - name: shared-logs
               mountPath: /var/log/service
 
-      # Volumes
       volumes:
         - name: logstash-config
           configMap:
@@ -91,7 +76,6 @@ spec:
               - key: logstash.yml
                 path: logstash.yml
 
-        # Shared Logs Volume using PVC
         - name: shared-logs
           persistentVolumeClaim:
             claimName: shared-logs-pvc

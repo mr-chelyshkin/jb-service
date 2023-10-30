@@ -44,7 +44,7 @@ func handlerLivenessProbe(w http.ResponseWriter, _ *http.Request) {
 // @Tags        Service State
 // @Summary		Change LivenessProbe: Success/Failure.
 // @Description	Change LivenessProbe service flag for check K8S reaction (expect pod restart).
-// @Produce		text/plain
+// @Produce		json
 // @Success		200
 // @Router		/api/v1/liveness-change [get]
 func handlerChangeLivenessProbe(w http.ResponseWriter, _ *http.Request) {
@@ -55,8 +55,14 @@ func handlerChangeLivenessProbe(w http.ResponseWriter, _ *http.Request) {
 		cfg.livenessIsOk = true
 	}
 
+	response := probeResponse{
+		Status:  "OK",
+		Message: fmt.Sprintf("LivenessProbe flag changed, now it's: %t", cfg.livenessIsOk),
+		Host:    app.ReplicaID(),
+	}
+	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
-	_, _ = w.Write([]byte(fmt.Sprintf("LivenessProbe status changed for %s: %t", app.ReplicaID(), cfg.livenessIsOk)))
+	_ = json.NewEncoder(w).Encode(response)
 }
 
 // @Tags        Service State
@@ -84,7 +90,7 @@ func handlerReadnessProbe(w http.ResponseWriter, _ *http.Request) {
 // @Tags        Service State
 // @Summary		Change ReadnessProbe: Success/Failure.
 // @Description	Change ReadnessProbe service flag for check K8S reaction (expect traffic interrupt, check by req logs: "replica_id").
-// @Produce		text/plain
+// @Produce		json
 // @Success		200
 // @Router		/api/v1/readness-change [get]
 func handlerChangeReadnessProbe(w http.ResponseWriter, _ *http.Request) {
@@ -95,14 +101,20 @@ func handlerChangeReadnessProbe(w http.ResponseWriter, _ *http.Request) {
 		cfg.readnessIsOk = true
 	}
 
+	response := probeResponse{
+		Status:  "OK",
+		Message: fmt.Sprintf("ReadnessProbe flag changed, now it's: %t", cfg.readnessIsOk),
+		Host:    app.ReplicaID(),
+	}
+	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
-	_, _ = w.Write([]byte(fmt.Sprintf("ReadnessIsOk status changed for %s: %t", app.ReplicaID(), cfg.readnessIsOk)))
+	_ = json.NewEncoder(w).Encode(response)
 }
 
 // @Tags        Service State
 // @Summary		Increase memory consumption.
 // @Description	Gradual increase in memory consumption for OOM.
-// @Produce		text/plain
+// @Produce		json
 // @Success		200
 // @Router		/api/v1/oomkill [get]
 func handlerCallOOM(w http.ResponseWriter, _ *http.Request) {
@@ -116,14 +128,21 @@ func handlerCallOOM(w http.ResponseWriter, _ *http.Request) {
 			time.Sleep(time.Second * 5)
 		}
 	}()
+
+	response := probeResponse{
+		Status:  "OK",
+		Message: "The process of gradual memory recycling has started, wait for OOM",
+		Host:    app.ReplicaID(),
+	}
+	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
-	_, _ = w.Write([]byte(fmt.Sprintf("The process of gradual memory recycling has started on %s, wait", app.ReplicaID())))
+	_ = json.NewEncoder(w).Encode(response)
 }
 
 // @Tags        Service State
 // @Summary		Increase cpu consumption.
 // @Description	Increase cpu consumption for throttling with duration 1 minute.
-// @Produce		text/plain
+// @Produce		json
 // @Success		200
 // @Router		/api/v1/throttling [get]
 func handlerThrottlingCPU(w http.ResponseWriter, _ *http.Request) {
@@ -145,6 +164,13 @@ func handlerThrottlingCPU(w http.ResponseWriter, _ *http.Request) {
 			go work(&wg)
 		}
 	}()
+
+	response := probeResponse{
+		Status:  "OK",
+		Message: "The process of cpu recycling has started, duration: 1 minute",
+		Host:    app.ReplicaID(),
+	}
+	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
-	_, _ = w.Write([]byte(fmt.Sprintf("The process of cpu recycling has started on %s, duration: 1 minute.", app.ReplicaID())))
+	_ = json.NewEncoder(w).Encode(response)
 }

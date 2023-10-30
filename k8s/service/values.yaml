@@ -89,21 +89,6 @@ autoscaling:
   targetMemoryUtilizationPercentage: 70
   targetRequestsCount: 0.250
 
-# Additional volumes on the output Deployment definition.
-volumes: []
-# - name: foo
-#   secret:
-#     secretName: mysecret
-#     optional: false
-
-# Additional volumeMounts on the output Deployment definition.
-volumeMounts: []
-# - name: foo
-#   mountPath: "/etc/foo"
-#   readOnly: true
-
 nodeSelector: {}
-
 tolerations: []
-
 affinity: {}
