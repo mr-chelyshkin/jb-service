@@ -22,8 +22,6 @@ Run service:
 ```shell
 task minikube/service/app-lookup
 ```
-![all-pod](https://github.com/mr-chelyshkin/jb-service/blob/main/media/all-pods.png)
-
 
 Run service:
 ```shell
