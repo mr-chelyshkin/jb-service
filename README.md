@@ -34,7 +34,8 @@ task minikube/infra/grafana-lookup
 # grafana has predefined Dashboard -> General -> kube-state
 # grafana has predefined Dashboard -> General -> JB-Service
 ``` 
-![grafana](https://github.com/mr-chelyshkin/jb-service/blob/main/media/grafana.png)
+![grafana](https://github.com/mr-chelyshkin/jb-service/blob/main/media/grafana-k8s.png)
+![grafana](https://github.com/mr-chelyshkin/jb-service/blob/main/media/grafana-service.png)
 ![grafana](https://github.com/mr-chelyshkin/jb-service/blob/main/media/grafana-creds.png)
 
 Run prometheus:
