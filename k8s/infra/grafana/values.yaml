@@ -706,6 +706,8 @@ dashboards:
   default:
     state-metrics:
       file: dashboards/state-metrics.json
+    service-board:
+      file: dashboards/jb-service.json
   # default:
   #   some-dashboard:
   #     json: |
