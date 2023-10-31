@@ -35,6 +35,7 @@ podAnnotations: {
 }
 
 podLabels: {
+  networkLimit: rps-limit,
   app: jb-service
 }
 

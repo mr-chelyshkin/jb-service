@@ -50,3 +50,10 @@ task minikube/infra/kibana-lookup
 # after, go to "discover" for watch logs
 ```
 ![kibana](https://github.com/mr-chelyshkin/jb-service/blob/main/media/kibana.png)
+
+## Check rateLimit (5rps)
+I use [http_bench](https://github.com/linkxzhou/http_bench).
+```shell
+http_bench http://127.0.0.1:{port} -c 5 -d 30s
+```
+![rate-limit](https://github.com/mr-chelyshkin/jb-service/blob/main/media/rate-limit.png)

@@ -81,7 +81,7 @@ tasks:
         for file in {{ .k8s_dir }}/infra/common/*.yaml; do
           kubectl apply -f "$file"
         done
-      - for: ["prometheus", "prometheus-adapter", "grafana", "elasticsearch", "kibana"]
+      - for: ["prometheus", "prometheus-adapter", "grafana", "elasticsearch", "kibana", "istio", "istiod"]
         cmd: |
           if helm list -q -n {{ .namespace_infra }} | grep -q {{ .ITEM }}; then
             helm upgrade {{ .ITEM }} {{ .k8s_dir }}/infra/{{ .ITEM }} -n {{ .namespace_infra }}
@@ -89,7 +89,8 @@ tasks:
             kubectl create namespace {{ .namespace_infra }} || true
             helm install {{ .ITEM }} {{ .k8s_dir }}/infra/{{ .ITEM }} -n {{ .namespace_infra }}
           fi
-      - "{{ .k8s_dir }}/infra/istio/bin/istioctl install --set profile=demo -y"
+      - "kubectl apply -f {{ .k8s_dir }}/infra/istiod/common/generated.yaml"
+      - "kubectl apply -f {{ .k8s_dir }}/infra/istiod/common/rate-limit.yaml"
       - "kubectl label namespace {{ .namespace_service }} istio-injection=enabled"
 
   k8s/deploy/service:
