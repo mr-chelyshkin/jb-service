@@ -123,9 +123,8 @@ func handlerCallOOM(w http.ResponseWriter, _ *http.Request) {
 	go func() {
 		var oom [][]byte
 		for {
-			hog := make([]byte, 1024*1024*10)
+			hog := make([]byte, 1024*1024*100)
 			oom = append(oom, hog)
-			time.Sleep(time.Second * 5)
 		}
 	}()
 
@@ -150,10 +149,9 @@ func handlerThrottlingCPU(w http.ResponseWriter, _ *http.Request) {
 	work := func(wg *sync.WaitGroup) {
 		defer wg.Done()
 
-		end := time.Now().Add(time.Second * 60)
+		end := time.Now().Add(time.Second * 180)
 		for time.Now().Before(end) {
 			_ = math.Sqrt(float64(time.Now().UnixNano()))
-			time.Sleep(time.Nanosecond * 500)
 		}
 	}
 	go func() {
@@ -167,7 +165,7 @@ func handlerThrottlingCPU(w http.ResponseWriter, _ *http.Request) {
 
 	response := probeResponse{
 		Status:  "OK",
-		Message: "The process of cpu recycling has started, duration: 1 minute",
+		Message: "The process of cpu recycling has started, duration: 3 minutes",
 		Host:    app.ReplicaID(),
 	}
 	w.Header().Set("Content-Type", "application/json")
