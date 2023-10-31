@@ -21,11 +21,6 @@ task minikube/up # run minikube and install all
 Run service:
 ```shell
 task minikube/service/app-lookup
-```
-
-Run service:
-```shell
-task minikube/service/app-lookup
 
 # main page is swagger with routes and routes description.
 ``` 
